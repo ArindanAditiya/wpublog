@@ -1,38 +1,39 @@
-<!doctype html>
-<html class="h-full bg-gray-100">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }}</title>
-    
-    {{-- tailwind --}}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])       
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
-
-    {{-- alpine --}}
-    <script src="//unpkg.com/alpinejs" defer></script>
-
     {{-- font --}}
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />  
-  </head>
-  <body class="h-full">
-    <div class="min-h-full">
-  
-        {{-- navbaer --}}
-        <x-navbar></x-navbar>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-        {{-- header --}}
-        {{-- passing data to component --}}
-        <x-header :title="$title"></x-header>
+    {{-- css --}}
+    @vite('resources/css/app.css')
+    @stack('css')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+    </style>
 
-        {{-- CONTENT --}}
-        <main>
-          <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">      
-            {{ $slot }}
-          </div>
-        </main>
+</head>
 
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
-  </body>
+<body class="">
+
+    <!-- Navbar -->
+    <x-navbar></x-navbar>
+
+    {{-- contet --}}
+    {{ $slot }}
+
+    <!-- Footer -->
+    <x-footer></x-footer>
+
+    {{-- js --}}
+    <script src="{{ asset('js/dom.js') }}"></script>
+    @stack('js')
+</body>
+
 </html>

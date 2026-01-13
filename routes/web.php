@@ -1,50 +1,60 @@
 <?php
 
-use App\Http\Controllers\PostDashboardController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostDashboardController;
 use PHPUnit\Framework\MockObject\ReturnValueNotConfiguredException;
 
 // other route
 Route::get('/', function () {
-    return view('home', ["title" => "Home Page"]);
+    return view('home', [
+        "title" => "Home Page",
+        "lastPosts"  => Post::latest()->paginate(2),
+        "popularPosts"  => Post::whereMonth("created_at", now()->month)->orderBy("watch", "desc")->paginate(2)
+    ]);
 });
-Route::get('/about', function () {
-    return view('about', ["title" => "About Page"]);
+Route::get('/profil-turatstebuireng', function () {
+    return view('posts', ["title" => "Profil "]);
 });
+Route::get('/catalog', function () {
+    return view('catalog', ["title" => "Catalog"]);
+}); 
 Route::get('/contact', function () {
-    return view('contact', ["title" => "Contact Page"]);
+    return view('contact', ["title" => "Kontak Kami"]);
+    
 });
+
+//BLOG POSTS
+Route::get("/posts", [PostController::class, "index"]);
+Route::get("/post/{post:slug}", [PostController::class, "show"]);
+Route::get("/post/{post:slug}/related", [PostController::class, "relatedPosts"]);
+
+// ________________________________________________________
+
+// BACKEND DASHBOARD
+
+// TEMPORARY ROUTE
+Route::get("/dashboard/create-account", function () {
+    return view("dashboard.create-account", ["title" => "Create Account"]);
+});
+Route::get("/dashboard/approve-account", function () {
+    return view("dashboard.approve-account", ["title" => "Approve Account"]);
+});
+Route::get("/dashboard/menejmen-kitab", function () {
+    return view("dashboard.kitab-management", ["title" => "Upload Kitab"]);
+});
+
 // __________________________________________________________
 
-//BLOG
-Route::get('/posts', function () {
-    $posts = Post::latest()->filter(request(["search",  "author", "category"]))->paginate(10)->withQueryString();
-    return view('posts', ["title" => "All Blog Posts", "posts" => $posts]);
-});
-Route::get("/post/{post:slug}", function(Post $post){
-    return view("post", ["title" => "Single Post", "post" => $post]);
-});
-
-
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::get('/dashboard', [PostDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-// Route::post('/dashboard', [PostDashboardController::class, 'store'])->middleware(['auth', 'verified'])->name('dashboard');
-// Route::get("/dashboard/create", [PostDashboardController::class, "create"])->middleware(['auth', 'verified']);
-// Route::delete("/dashboard/{post:slug}", [PostDashboardController::class, "destroy"])->middleware(['auth', 'verified']);
-// Route::get("/dashboard/{post:slug}", [PostDashboardController::class, "show"])->middleware(['auth', 'verified']) ;
-
+// DASHBOARD POSTS
 Route::middleware(["auth","verified"])->group(function () {
     // READ show all posts
     Route::get('/dashboard', [PostDashboardController::class, 'index'])->name('dashboard');
 
     // CREATE
-    Route::get("/dashboard/create", [PostDashboardController::class, "create"]);
+    Route::get("/dashboard/menejemen-artikel", [PostDashboardController::class, "create"]);
     Route::post('/dashboard', [PostDashboardController::class, 'store']);
     Route::post("/uploadthumbnail", [PostDashboardController::class, "uploadThumbnail"]);
 
@@ -59,7 +69,7 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::get("/dashboard/{post:slug}", [PostDashboardController::class, "show"]);
 });
 
-// mideddlewere
+// PROFILE
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

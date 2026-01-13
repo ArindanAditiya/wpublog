@@ -14,16 +14,28 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::create([
-            "name" => "Web Design",
-            "slug" => "web-design"
+            "name" => "Fikih",
+            "slug" => "fikih"
         ]);
         Category::create([
-            "name" => "Web Programming",
-            "slug" => "web-programming"
+            "name" => "Ilmu Tasawuf",
+            "slug" => "ilmu-tasawuf"
         ]);
         Category::create([
-            "name" => "Artificial Intelligence",
-            "slug" => "AI"
+            "name" => "Ilmu Hadits",
+            "slug" => "ilmu-hadits"
+        ]);
+        Category::create([
+            "name" => "Al-qur'an",
+            "slug" => "al-qur'an"
+        ]);
+        Category::create([
+            "name" => "Akhlaq",
+            "slug" => "akhlaq"
+        ]);
+        Category::create([
+            "name" => "Nahwu Shorof",
+            "slug" => "nahwu-shorof"
         ]);
     }
 }

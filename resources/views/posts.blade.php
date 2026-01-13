@@ -1,71 +1,165 @@
-  <x-layout :title="$title">    
-    <div class="py-4 px-4 mx-auto max-w-7xl lg:py-16 lg:px-6">
-    @php
-      // if (request("search")) {
-      //   echo "<h2 class='text-2xl my-4 font-bold tracking-tight text-gray-900 dark:text-white'>Result for : " . request("search") . "</h2>";
-      // }
-    @endphp
-    <form class="max-w-md mx-auto mb-8">
-         @if (request("category"))
-           <input type="hidden" name="category" value="{{ request('category') }}">
-         @endif
-         @if (request("author"))
-           <input type="hidden" name="author" value="{{ request('author') }}">
-         @endif
-        <label for="search" class="block mb-2.5 text-sm font-medium text-heading sr-only ">Search</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14    0 7 7 0 0 1 14 0Z"/></svg>
+<x-layout :title="$title">
+    {{-- Artikel list --}}
+    <section class="py-12 md:py-16">
+        <div class="container mx-auto px-4 md:px-12">
+            <!-- wrapper utama -->
+            <div class="flex flex-col lg:flex-row gap-12 mt-12">
+
+                <!-- konten kiri -->
+                <div class="w-full lg:w-8/12 ">
+
+                    <h2
+                        class="text-2xl md:text-3xl font-bold my-8 text-white bg-[#A2AF9B] inline-block p-1 self-end relative after:absolute after:left-0 after:top-11.25 after:block 
+                        after:w-[125%] md:after:w-[150%] after:h-2 after:bg-[#A2AF9B]">
+                        {{ $title }}
+                    </h2>
+
+                    <!-- list artikel -->
+                    <div class="flex flex-col gap-x-6 gap-y-10 md:flex-row md:flex-wrap lg:justify-between lg:gap-x-0">
+                        @foreach ($posts as $post)
+                            <a href="/post/{{ $post->slug }}" class="w-full md:w-[48%] lg:w-[49%]">
+                                <article class="group cursor-pointer flex flex-col h-full">
+                                    <div class="overflow-hidden rounded-lg mb-4 h-48 lg:h-52 bg-gray-100">
+                                        <img src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
+                                            alt="{{ $post->title }}"
+                                            class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" />
+                                    </div>
+
+                                    <h3
+                                        class="text-md lg:text-xl font-bold text-gray-900 leading-snug group-hover:text-indigo-600 transition mb-2">
+                                        {{ $post->title }}
+                                    </h3>
+                                    <div class="flex items-center gap-1 text-xs">
+                                        <span class="inline-flex items-center bg-gray-900 py-1 px-2 text-white">
+                                            {{ $post->category->name }}
+                                        </span>
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+               c4.478 0 8.268 2.943 9.542 7
+               -1.274 4.057-5.064 7-9.542 7
+               -4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+
+                                        <span class="leading-none">
+                                            {{ $post->watch }}
+                                        </span>
+                                    </div>
+
+                                    <p class="text-sm text-gray-500">
+                                        <span class="font-semibold text-gray-900">{{ $post->author->name }}</span>
+                                        - {{ $post->created_at->diffForHumans() }}
+                                    </p>
+                                </article>
+                            </a>
+                        @endforeach
+                    </div>
+
+                    @if ($posts->hasPages())
+                        <x-posts-pagination :posts="$posts" />
+                    @endif
+                </div>
+
+                <!-- sidebar kanan -->
+                <aside class="w-full lg:w-4/12 border-t lg:border-t-0 lg:border-l border-gray-100 pt-8 lg:pt-0 lg:pl-8">
+                    <div class="sticky top-24">
+                        <h2 class="text-2xl md:text-3xl font-bold my-8 text-white bg-[#A2AF9B] inline-block p-1">
+                            Terpopuler {{ now()->translatedFormat('F') }}
+                        </h2>
+
+                        <div class="flex flex-col gap-6">
+                            @foreach ($popularPosts as $post)
+                                <a href="/post/{{ $post->slug }}" class="flex gap-4 group items-start border-bottom">
+                                    <div class="w-24 h-24 shrink-0 rounded overflow-hidden bg-gray-200">
+                                        <img src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
+                                            alt="{{ $post->title }}"
+                                            class="w-full h-full object-cover group-hover:opacity-80 transition" />
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <h3
+                                            class="text-sm font-bold text-gray-900 leading-snug group-hover:text-indigo-600 transition line-clamp-2">
+                                            {{ $post->title }}
+                                        </h3>
+                                        <div class="flex items-center gap-1 text-xs mt-2">
+                                            <span class="inline-flex items-center bg-gray-900 py-0.5 px-1 text-white">
+                                                {{ $post->category->name }}
+                                            </span>
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+               c4.478 0 8.268 2.943 9.542 7
+               -1.274 4.057-5.064 7-9.542 7
+               -4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+
+                                            <span class="leading-none">
+                                                {{ $post->watch }}
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-gray-500">
+                                            <span class="font-semibold text-gray-900">{{ $post->author->name }}</span>
+                                            - {{ $post->created_at->diffForHumans() }}
+                                        </p>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-bold my-8 text-white bg-[#A2AF9B] inline-block p-1">
+                            Artikel Terbaru
+                        </h2>
+
+                        <div class="flex flex-col gap-6">
+                            @foreach ($lastPosts as $post)
+                                <a href="/post/{{ $post->slug }}" class="flex gap-4 group items-start">
+                                    <div class="w-24 h-24 shrink-0 rounded overflow-hidden bg-gray-200">
+                                        <img src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
+                                            alt="{{ $post->title }}"
+                                            class="w-full h-full object-cover group-hover:opacity-80 transition" />
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <h3
+                                            class="text-sm font-bold text-gray-900 leading-snug group-hover:text-indigo-600 transition line-clamp-2">
+                                            {{ $post->title }}
+                                        </h3>
+                                        <div class="flex items-center gap-1 text-xs mt-2">
+                                            <span class="inline-flex items-center bg-gray-900 py-0.5 px-1 text-white">
+                                                {{ $post->category->name }}
+                                            </span>
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+               c4.478 0 8.268 2.943 9.542 7
+               -1.274 4.057-5.064 7-9.542 7
+               -4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+
+                                            <span class="leading-none">
+                                                {{ $post->watch }}
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-gray-500">
+                                            <span class="font-semibold text-gray-900">{{ $post->author->name }}</span>
+                                            - {{ $post->created_at->diffForHumans() }}
+                                        </p>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </aside>
+
             </div>
-        <input name="search" type="search" id="search" class="block w-full p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body" placeholder="Search"    required autofocus autocomplete="off" />
-        <button type="submit" class="absolute end-1.5 bottom-1.5 text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded text-xs px-3 py-1.5    focus:outline-none">Search</button>
         </div>
-    </form>
-
-    {{-- Asli bawaan laravel --}}
-    {{-- {{ $posts->links() }} --}}
-
-    {{-- costume pagination --}}
-    @if ($posts->hasPages())
-      <x-pagination :posts="$posts"></x-pagination>
-    @endif
-
-      <div class="mt-4 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        @forelse ( $posts as $post )
-          <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-              <div class="flex justify-between items-center mb-5 text-gray-500">
-                {{-- category link --}}
-                <x-category-link href="/posts?category={{ $post->category->slug }}" :categorySlug="$post->category->slug">
-                  {{ $post->category->name }}
-                </x-category-link>
-                <span class="text-sm">{{ $post["created_at"]->diffForHumans() }}</span>
-              </div>
-              <img
-              src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
-              alt="{{ $post->title }}"
-              class="w-full h-40 object-cover"
-              >
-              <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><a href="/post/{{ $post['slug'] }}">{{ $post["title"] }}</a></h2>
-              {{-- <div class="mb-5 font-light text-gray-500 dark:text-gray-400">{!! Str::words($post["body"], 20, '...') !!}</div> --}}
-              <div class="flex justify-between items-center">
-                  <a href="/posts?author={{ $post->author->username }}" class="flex items-center space-x-4 text-sm">
-                      <img class="object-cover w-7 h-7 rounded-full" src="{{ $post->author->avatar ? asset('storage/' . $post->author->avatar) : asset('img/default-avatar.jpg') }}" alt="Jese Leos avatar" />
-                      <span class="font-medium dark:text-white hover:underline">
-                          {{ $post->author->name }}
-                      </span>
-                  </a>
-                  <a href="/post/{{ $post['slug'] }}" class="inline-flex items-center font-medium text-primary-600 text-sm dark:text-primary-500 hover:underline">
-                      Read more
-                      <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                  </a>
-              </div>
-          </article>  
-      @empty
-          <div class="py-4 border-b border-gray-600">
-            <p class="text-xl font-bold">Articel Not Found</p>
-            <a href="/posts" class="text-blue-500 hover:underline block mb-4">&laquo; Back to all posts.</a>
-          </div>
-      @endforelse
-    </div>
-  </div>
+    </section>
 </x-layout>

@@ -22,14 +22,8 @@ class PostDashboardController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->where("author_id", Auth::user()->id);        
-        $allPosts = count($posts->get());
 
-        if(request("keyword")){
-            $posts->where("title", "like", "%".request("keyword")."%");
-        }
-
-        return view('dashboard.index', ["posts"=> $posts->paginate(7)->withQueryString(), "countPosts"=>$allPosts]);   
+        return view("dashboard.index");
     }
 
     /**
@@ -37,14 +31,34 @@ class PostDashboardController extends Controller
      */
     public function create()
     {
-        return view("dashboard.create", [
-            "categories" => Category::all()
-        ]);
-    }
+        $query = Post::where('author_id', Auth::id());
 
+        if (request('keyword')) {
+            $query->where('title', 'like', '%' . request('keyword') . '%');
+        }
+        
+        if (request('sort_by')) {
+            match (request('sort_by')) {
+                'oldest'     => $query->oldest(),
+                'latest'     => $query->latest(),
+                'title_asc'  => $query->orderBy('title', 'asc'),
+                'title_desc' => $query->orderBy('title', 'desc'),
+                default      => $query->latest(),
+            };
+        } else {
+            $query->latest(); // default sorting
+        }
+        
+        return view('dashboard.article-management', [
+            'posts'       => $query->paginate(10)->withQueryString(),
+            'countPosts'  => $query->count(),
+            'categories'  => Category::all(),
+        ]);
+
+    }
     /**
      * Store a newly created resource in storage.
-    */
+     */
     public function store(Request $request)
     {
         

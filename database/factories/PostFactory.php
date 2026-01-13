@@ -26,6 +26,8 @@ class PostFactory extends Factory
             "author_id" => User::factory(),
             "category_id" => Category::factory(),
             "slug" => Str::slug($title),
+            "watch"=> rand(100, 1000),
+            "status"=> fake()->randomElement(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
             "body" => fake()->text()
         ];
     }

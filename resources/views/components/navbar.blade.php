@@ -1,102 +1,139 @@
-<nav class="bg-gray-800">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
-        <div class="flex items-center">
-          <div class="shrink-0">
-            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="size-8" />
-          </div>
-          <div class="hidden md:block">
-            <div class="ml-10 flex items-baseline space-x-4">
-              <x-my-nav-link href="/" :current="request()->is('/')">Home</x-my-nav-link>
-              <x-my-nav-link href="/posts" :current="request()->is('posts') || request()->is('post/*')">Posts</x-my-nav-link>
-              <x-my-nav-link href="/about" :current="request()->is('about')">About</x-my-nav-link>
-              <x-my-nav-link href="/contact" :current="request()->is('contact')">Contact</x-my-nav-link>
+<nav id="navbar" class="fixed w-full z-50 transition-all duration-300 ease-in-out bg-[#A2AF9B] text-white shadow-md">
+    <div class="container mx-auto peer-[]:x-4 md:px-12">
+        <div class="flex justify-between items-center h-20">
 
+            <a href="/" class="flex items-center gap-3">
+                <img src="{{ asset('img/LOGO TURATS putih 1.png') }}" alt="Logo" id="logo-img"
+                    class="h-12 w-auto object-contain filter brightness-0 md:brightness-0 md:invert transition-all duration-300">
+                <span class="text-xl font-bold tracking-wide">Turast Tebuireng</span>
+            </a>
+
+            <div class="hidden md:flex space-x-8 items-center font-medium text-sm tracking-wider">
+                <a href="/" class="hover:text-yellow-500 transition">BERANDA</a>
+                <a href="/profile" class="hover:text-yellow-500 transition">PROFIL</a>
+                <div class="relative group h-20 flex items-center">
+                    <button class="flex items-center hover:text-yellow-500 transition focus:outline-none gap-1">
+                        ARTIKEL
+                        <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-200"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div
+                        class="absolute top-16 left-0 mt-2 w-56 bg-white text-gray-800 rounded-lg shadow-xl py-2 hidden group-hover:block border border-gray-100">
+                        <a href="/posts"
+                            class="block px-5 py-3 hover:bg-gray-50 hover:text-indigo-600 transition border-b-1  border-gray-100">Semua
+                            Artikel</a>
+                        @foreach (App\Models\Category::all() as $category)
+                            <a href="/posts?category={{ $category->slug }}"
+                                class="block px-5 py-3 hover:bg-gray-50 hover:text-indigo-600 transition">{{ $category->name }}</a>
+                        @endforeach
+
+
+
+                    </div>
+                </div>
+                <a href="/catalog" class="hover:text-yellow-500 transition">KATALOG</a>
+                <a href="/contact" class="hover:text-yellow-500 transition">KONTAK KAMI</a>
             </div>
-          </div>
-        </div>
-        <div class="hidden md:block">
-          <div class="ml-4 flex items-center md:ml-6">        
-            <!-- Profile dropdown -->
-            <el-dropdown class="relative ml-3">
-              @if (Auth::check())
-                <button type="button" class="relative flex max-w-xs items-center rounded-full   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                <span class="absolute -inset-1.5"></span>
-                <span class="sr-only">Open user menu</span>
-                <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar ) : asset('img/default-avatar.jpg')}}" alt="{{ Auth::user()->username }}" class="object-cover size-8 rounded-full outline -outline-offset-1 outline-white/10" />
-                <div class="text-xs text-gray-300 font-medium ml-3 cursor-pointer">{{ Auth::user()->name }}</div>
-                <div class="ms-1 text-gray-300">
-                   <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                       <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                   </svg>
-                  </div>
-                </button>
-              @else
-                <a href="/login" class="text-xs text-white font-medium">Login</a>
-                <span class="text-white">|</span>
-                <a href="/register" class="text-xs text-white font-medium">Register</a>
-              @endif
 
-              <el-menu anchor="bottom end" popover class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-                <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Your profile</a>
-                <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Settings</a>
-                <form method="POST" action="/logout">
-                  @csrf
-                  <button type="submit" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden cursor-pointer">Log out</button>
-                </form>
-              </el-menu>
-            </el-dropdown>
-          </div>
+            <div class="hidden md:flex items-center gap-6">
+                <button id="desktop-search-btn" class="hover:text-yellow-500 transition focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+                <a href="/register" class="text-white hover:text-yellow-500 focus:outline-none" aria-label="User Menu">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </a>
+                <img src="{{ asset('img/tebuireng 1.png') }}" alt="Badge" class="h-10 w-auto">
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-white focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="-mr-2 flex md:hidden">
-          <!-- Mobile menu button -->
-          <button type="button" command="--toggle" commandfor="mobile-menu" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
-            <span class="absolute -inset-0.5"></span>
-            <span class="sr-only">Open main menu</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 in-aria-expanded:hidden">
-              <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 not-in-aria-expanded:hidden">
-              <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-        </div>
-      </div>
     </div>
 
-    <el-disclosure id="mobile-menu" hidden class="block md:hidden">
-      <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-        <x-my-nav-link href="/" :current="request()->is('/')">Home</x-my-nav-link>
-        <x-my-nav-link href="/posts" :current="request()->is('posts')">Posts</x-my-nav-link>
-        <x-my-nav-link href="/about" :current="request()->is('about')">About</x-my-nav-link>
-        <x-my-nav-link href="/contact" :current="request()->is('contact')">Contact</x-my-nav-link>
-      </div>
-      <div class="border-t border-white/10 pt-4 pb-3"> 
-        @if (Auth::check())
-          <div class="flex items-center px-5">
-            <div class="shrink-0">
-              <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar ) : asset('img/default-avatar.jpg')}}" alt="{{ Auth::user()->username }}" class="size-10 rounded-full outline -outline-offset-1 outline-white/10" />
+    <div id="mobile-menu"
+        class="hidden md:hidden bg-white text-gray-900 border-t border-gray-200 shadow-lg absolute w-full left-0 top-20">
+        <div class="px-6 py-4 space-y-3">
+            <a href="index.html"
+                class="block py-2 font-medium hover:text-indigo-600 border-b border-gray-100">BERANDA</a>
+            <a href="artikel-post.html"
+                class="block py-2 font-medium hover:text-indigo-600 border-b border-gray-100">PROFIL</a>
+            <div x-data="{ open: false }">
+                <button id="mobile-dropdown-btn"
+                    class="w-full flex justify-between items-center py-2 font-medium hover:text-indigo-600 border-b border-gray-100 focus:outline-none">
+                    ARTIKEL
+                    <svg id="mobile-chevron" class="w-4 h-4 transition-transform duration-200" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div id="mobile-dropdown-content" class="hidden pl-4 mt-2 space-y-2 bg-gray-50 rounded-md p-3">
+                    <a href="/posts" class="block text-sm text-gray-600 hover:text-indigo-600">Kegiatan
+                        Kami</a>
+                    <a href="/posts" class="block text-sm text-gray-600 hover:text-indigo-600">Opini &
+                        Esai</a>
+                    <a href="/posts" class="block text-sm text-gray-600 hover:text-indigo-600">Kajian
+                        Turats</a>
+                </div>
             </div>
-            <div class="ml-3">
-              <div class="text-base/5 font-medium text-white">{{ Auth::user()->name }}</div>
-              <div class="text-sm font-medium text-gray-400">{{ Auth::user()->email }}</div>
+            <a href="/katalog" class="block py-2 font-medium hover:text-indigo-600 border-b border-gray-100">KATALOG</a>
+            <a href="/kontak" class="block py-2 font-medium hover:text-indigo-600 border-b border-gray-100">KONTAK
+                KAMI</a>
+
+            <div class="flex gap-6 mt-4 pt-4 justify-center border-t border-gray-100">
+                <button id="mobile-search-btn" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+                <a href="/register" class="text-gray-600 hover:text-indigo-600 focus:outline-none"
+                    aria-label="User Menu">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </a>
             </div>
-          </div>
-          <div class="mt-3 space-y-1 px-2">
-            <a href="/profile" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Your profile</a>
-            <a href="/dashboard" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Settings</a>
-            <form class="full" method="POST" action="/logout">
-                  @csrf
-                  <button type="submit" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Log out</button>
-            </form>
-          </div>
-        @else
-          <div class="full flex justify-center items-center gap-3">
-            <a href="/login" class="inline-block rounded-md px-3 py-2 text-base font-medium bg-gray-900 text-white">Login</a>
-          <span class="text-white">|</span>
-          <a href="/register" class="inline-block rounded-md px-3 py-2 text-base font-medium bg-gray-900 text-white">Register</a>
-          </div>
-        @endif
-      </div>
-    </el-disclosure>
-  </nav>
+        </div>
+    </div>
+</nav>
+
+<div id="search-modal"
+    class="fixed inset-0 bg-black/80 backdrop-blur-sm z-60 hidden flex-col items-center justify-center fade-in">
+    <button id="close-search" class="absolute top-6 right-6 text-white hover:text-gray-300">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+
+    <div class="w-full max-w-3xl px-6 text-center">
+        <h2 class="text-white text-2xl font-semibold mb-6">Pencarian Koleksi & Artikel</h2>
+        <div class="relative">
+            <input type="text" placeholder="Ketik kata kunci lalu tekan Enter..."
+                class="w-full py-4 pl-6 pr-12 text-xl text-gray-900 rounded-full focus:outline-none shadow-2xl bg-white">
+            <button class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-indigo-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>

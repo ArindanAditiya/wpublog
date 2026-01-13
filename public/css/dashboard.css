@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+body {
+    font-family: "Inter", sans-serif;
+}
+.sidebar-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.scale-in {
+    animation: scaleIn 0.2s ease-out;
+}
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #10b981;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #059669;
+}
+/* Table responsive */
+@media (max-width: 768px) {
+    .responsive-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+/* Custom styling untuk Quill editor */
+.ql-toolbar {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-color: #e2e8f0 !important;
+}
+
+.ql-container {
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    border-color: #e2e8f0 !important;
+    font-family: inherit;
+}
+
+.ql-container.ql-snow,
+.ql-toolbar.ql-snow {
+    border: 1px solid #e2e8f0;
+}
+
+.ql-editor {
+    min-height: 200px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.ql-editor:focus {
+    outline: 2px solid #10b981;
+    outline-offset: -2px;
+}
+
+/* Styling untuk preview gambar */
+#image-preview {
+    transition: all 0.3s ease;
+}
+
+#image-preview:hover {
+    border-color: #10b981;
+}
+
+#cover-preview {
+    transition: transform 0.3s ease;
+}
+
+#remove-image {
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#remove-image:hover {
+    transform: scale(1.1);
+}

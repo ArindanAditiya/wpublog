@@ -6,7 +6,7 @@ export default defineConfig({
     server: {
         host: true,
         hmr: {
-            host: "wpublog.test",
+            host: "turatstebuireng.test",
         },
     },
     plugins: [

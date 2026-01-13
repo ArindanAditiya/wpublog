@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("title");
             $table->string("slug");
+            $table->integer("watch");
+            $table->string("status")->default("DRAFT");
             $table->text("body");
             // $table->unsignedBigInteger('author_id');
             // $table->foreign('author_id')->references('id')->on('users');

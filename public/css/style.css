@@ -1,0 +1,44 @@
+
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+      body { font-family: 'Inter', sans-serif; }
+      
+      .my-poppins {
+        font-family: "Poppins", sans-serif;
+      }
+      .group:hover .group-hover\:block { display: block; }
+        
+        /* Animasi Fade In Sederhana */
+        .fade-in { animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+      .hero-bg {
+        background: linear-gradient(rgba(0, 80, 0, 0.7), rgba(0, 60, 0, 0.7)),
+          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23007030"/><path d="M0 0L100 100M100 0L0 100" stroke="%23008040" stroke-width="1"/></svg>');
+        background-size: cover;
+        background-position: center;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+      .dropdown-enter {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      .dropdown-enter-active {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.3s, transform 0.3s;
+      }
+
+      /* Sembunyikan Scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
