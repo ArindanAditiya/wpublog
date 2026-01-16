@@ -1,130 +1,190 @@
-<main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased">
-  <div class="flex justify-between px-4 mx-auto max-w-7xl">
-    <article class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+<x-app-layout>
+    <main id="top" class="w-full lg:w-10/12 mx-auto px-4 space-y-8 mt-10 mb-10">
+        <div class="flex flex-wrap gap-3 pt-8  sticky top-0" x-data="{ showConfirmTop: false }">
+            <div class=" bg-white p-4 rounded-lg shadow-xs border border-gray-200 z-999999  ">
+                <a href="/dashboard/menejemen-artikel/{{ $post->slug }}/edit"
+                    class="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Edit
+                </a>
 
-      <a href="/dashboard" class="font-medium text-blue-500 hover:underline">
-        &laquo; Back to all posts
-      </a>
-
-      <header class="my-6 lg:mb-10 not-format">
-
-        {{-- Thumbnail --}}
-        <div class="relative w-full overflow-hidden rounded-xl shadow-lg mb-6">
-          <div class="aspect-video">
-            <img
-              src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
-              alt="{{ $post->title }}"
-              class="w-full h-full object-cover"
-            >
-          </div>
-
-          {{-- gradient overlay --}}
-          <div class="absolute inset-0 bg-linear-to-t from-black/40 via-black/10 to-transparent"></div>
-        </div>
-
-        {{-- Author --}}
-        <address class="flex items-center mb-6 not-italic">
-          <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-            <img class="mr-4 w-16 h-16 rounded-full object-cover" src="{{  $post->author->avatar ? asset('storage/' . $post->author->avatar) : asset('img/default-avatar.jpg') }}" alt="{{ $post->author->name }}">
-            <div>
-              <a
-                href="/posts?author={{ $post->author->username }}"
-                rel="author"
-                class="block text-lg font-bold text-gray-900 dark:text-white"
-              >
-                {{ $post->author->name }}
-              </a>
-
-              <x-category-link
-                href="/posts?category={{ $post->category->slug }}"
-                :categorySlug="$post->category->slug">
-                {{ $post->category->name }}
-              </x-category-link>
-
-              <p class="text-sm text-gray-500 dark:text-gray-400">
-                {{ $post->created_at->diffForHumans() }}
-              </p>
-            </div>
-          </div>
-        </address>
-
-        {{-- Action Button --}}
-        <div class="flex gap-3 mb-6">
-          <a
-            class="py-2 px-4 rounded-md text-white text-sm bg-blue-500 hover:bg-blue-600"
-            href="/dashboard/{{ $post->slug }}/edit">
-            Edit
-          </a>
-
-          <div x-data="{ openDeleteModal: false }">
-            <button
-              @click="openDeleteModal = true"
-              class="py-2 px-4 rounded-md text-white text-sm bg-red-500 hover:bg-red-600">
-              Delete
-            </button>
-
-            {{-- Delete Modal --}}
-            <div
-              x-show="openDeleteModal"
-              x-transition
-              @click.outside="openDeleteModal = false"
-              class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-
-              <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full relative">
-
-                <button
-                  @click="openDeleteModal = false"
-                  class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-white">
-                  ✕
+                <button @click="showConfirmTop = true"
+                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Hapus
                 </button>
 
-                <svg
-                  class="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-gray-500"
-                  fill="currentColor"
-                  viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9z"
-                    clip-rule="evenodd" />
-                </svg>
-
-                <p class="text-center text-gray-600 dark:text-gray-300 mb-6">
-                  Apakah anda yakin ingin menghapus permanen postingan artikel ini?
-                </p>
-
-                <div class="flex justify-center gap-4">
-                  <button
-                    @click="openDeleteModal = false"
-                    class="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600">
-                    Cancel
-                  </button>
-
-                  <form action="/dashboard/{{ $post->slug }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button
-                      type="submit"
-                      class="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700">
-                      Yes, delete
-                    </button>
-                  </form>
-                </div>
-              </div>
+                <a href="/dashboard/menejemen-artikel"
+                    class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:bg-gray-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Kembali
+                </a>
             </div>
-          </div>
+            <!-- CONFIRMATION DIALOG -->
+            <div x-show="showConfirmTop"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                @click.away="showConfirmTop = false">
+                <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Konfirmasi Penghapusan</h3>
+                    <p class="text-gray-600 mb-6">Yakin ingin menghapus artikel ini?</p>
+                    <div class="flex gap-3">
+                        <button @click="showConfirmTop = false"
+                            class="flex-1 px-4 py-2 bg-gray-300 text-gray-900 rounded-lg font-semibold hover:bg-gray-400 transition">
+                            Batal
+                        </button>
+                        <button @click="document.getElementById('delete-form-{{ $post->id }}').submit()"
+                            class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
+                            Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- HEADER -->
+        <header class="my-4 lg:mb-6 not-format">
+            <address class="flex items-center mb-6 not-italic">
+                <div class="inline-flex items-center mr-3 text-sm text-gray-900">
+                    <img class="object-cover mr-4 w-16 h-16 rounded-full"
+                        src="{{ $post->author->avatar ? asset('storage/' . $post->author->avatar) : asset('img/default-avatar.jpg') }}"
+                        alt="{{ $post->author->name }}">
+                    <div class="flex-1">
+                        <a href="/posts?author={{ $post->author->username }}" rel="author"
+                            class="block text-xl font-bold text-gray-900 hover:text-blue-600 transition">{{ $post->author->name }}</a>
+                        <div class="flex items-center gap-2 text-xs mt-1">
+                            <span
+                                class="inline-flex items-center bg-gray-900 py-1 px-3 text-white rounded text-xs font-semibold">
+                                {{ $post->category->name }}
+                            </span>
+
+                            <div class="flex items-center gap-1 text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                <span>{{ $post->watch }}</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            {{ $post['created_at']->diffForHumans() }}</p>
+                    </div>
+                </div>
+            </address>
+            <h1 class="mb-6 text-3xl lg:text-4xl font-extrabold leading-tight text-gray-900">
+                {{ $post['title'] }}
+            </h1>
+        </header>
+
+        <!-- THUMBNAIL -->
+        <div class="h-72 md:h-80 lg:h-96 rounded-lg overflow-hidden bg-gray-100 shadow-md">
+            <img src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
+                alt="{{ $post->title }}" class="w-full h-full object-cover hover:scale-105 transition duration-500" />
         </div>
 
-        {{-- Title --}}
-        <h1 class="text-3xl lg:text-4xl font-extrabold leading-tight text-gray-900 dark:text-white">
-          {{ $post->title }}
-        </h1>
+        <!-- ARTICLE CONTENT -->
+        <article class="prose max-w-none text-gray-700 leading-relaxed text-justify space-y-4">
+            {!! $post->body !!}
+        </article>
 
-      </header>
+        <!-- ACTION BUTTONS -->
+        <div class="flex flex-wrap gap-3 pt-8 border-t border-gray-200" x-data="{ showConfirm: false }">
+            <a href="/dashboard/menejemen-artikel/{{ $post->slug }}/edit"
+                class="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit
+            </a>
 
-      {{-- Content --}}
-      <div class="prose dark:prose-invert max-w-none">
-        {!! $post->body !!}
-      </div>
+            <button @click="showConfirm = true"
+                class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Hapus
+            </button>
 
-    </article>
-  </div>
-</main>
+            <a href="/dashboard/menejemen-artikel"
+                class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:bg-gray-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali
+            </a>
+
+            <!-- CONFIRMATION DIALOG -->
+            <div x-show="showConfirm"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                @click.away="showConfirm = false">
+                <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Konfirmasi Penghapusan</h3>
+                    <p class="text-gray-600 mb-6">Yakin ingin menghapus artikel ini?</p>
+                    <div class="flex gap-3">
+                        <button @click="showConfirm = false"
+                            class="flex-1 px-4 py-2 bg-gray-300 text-gray-900 rounded-lg font-semibold hover:bg-gray-400 transition">
+                            Batal
+                        </button>
+                        <button @click="document.getElementById('delete-form-{{ $post->id }}').submit()"
+                            class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
+                            Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- META INFORMATION -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8 border-t border-gray-200">
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-sm text-gray-500 font-semibold">Diperbarui</p>
+                <p class="text-lg text-gray-900">{{ $post->updated_at->format('d M Y') }}</p>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-sm text-gray-500 font-semibold">Total Dibaca</p>
+                <p class="text-lg text-gray-900">{{ $post->watch ?? 0 }} kali</p>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-sm text-gray-500 font-semibold">Penulis</p>
+                <p class="text-lg text-gray-900">{{ $post->author->name }}</p>
+            </div>
+        </div>
+
+        {{-- to top button --}}
+        <div class="fixed bottom-5 left-1/2 transform -translate-x-1/2">
+            <a href="#top"
+                class="inline-flex items-center justify-center px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg border border-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+            </a>
+        </div>
+    </main>
+
+    <!-- DELETE FORM (HIDDEN) -->
+    <form id="delete-form-{{ $post->id }}" action="/dashboard/menejemen-artikel/{{ $post->slug }}/delete"
+        method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
+</x-app-layout>

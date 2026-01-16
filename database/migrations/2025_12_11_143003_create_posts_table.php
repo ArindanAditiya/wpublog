@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("title");
             $table->string("slug");
-            $table->integer("watch");
+            $table->integer("watch")->default(0);
             $table->string("status")->default("DRAFT");
             $table->text("body");
             // $table->unsignedBigInteger('author_id');

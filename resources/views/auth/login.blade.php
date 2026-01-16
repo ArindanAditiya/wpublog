@@ -1,11 +1,10 @@
 <x-layout :title="$title">
     <section class="min-h-screen flex items-center justify-center bg-gray-100">
         <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <form method="POST" action="{{ route('login') }}" class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+            <x-auth-session-status class="my-4" :status="session('status')" />
             @csrf
-
             <h1 class="text-2xl font-bold text-center mb-6">Login</h1>
 
             <!-- Email Address or Username (USer credentials) -->

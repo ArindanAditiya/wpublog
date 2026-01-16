@@ -45,7 +45,7 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </button>
-                <a href="/register" class="text-white hover:text-yellow-500 focus:outline-none" aria-label="User Menu">
+                <a href="/login" class="text-white hover:text-yellow-500 focus:outline-none" aria-label="User Menu">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -102,7 +102,7 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </button>
-                <a href="/register" class="text-gray-600 hover:text-indigo-600 focus:outline-none"
+                <a href="/login" class="text-gray-600 hover:text-indigo-600 focus:outline-none"
                     aria-label="User Menu">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

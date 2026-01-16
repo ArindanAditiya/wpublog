@@ -29,9 +29,10 @@ class PostDashboardController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function articleMenegement()
     {
-        $query = Post::where('author_id', Auth::id());
+        // $query = Post::where('author_id', Auth::id()); //kalo mau khusus ambil sesuai author
+        $query = Post::query();
 
         if (request('keyword')) {
             $query->where('title', 'like', '%' . request('keyword') . '%');
@@ -59,49 +60,41 @@ class PostDashboardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        
-        // dd($request->thumbnail);
-        // $request->validate([
-        //     "title"=>"required|unique:posts|min:4|max:255",
-        //     "category_id" => "required",
-        //     "body" => "required"
-        // ]);
 
-        
+    public function create(){
+        return view("components.posts.create-article-form", [
+            "categories" => Category::all(),
+        ]);
+    }
+    
+    public function store(Request $request)
+    {   
         Validator::make($request->all(),[ 
             //valiidation rules
             "title"=>"required|unique:posts|min:4|max:255",
             "category_id" => "required",
+            "status" => "required",
             "body" => "required|min:100",
-            "thumbnail" => "max:1000"
-        ],[ 
+            "thumbnail" => "required"
+        ],[
             // costume message
             "title.required" => "field :attribute harus diisi",
+            "title.unique" => "judul yang anda masukkan sudah ada",
+            "title.min" => "miminal masukkan :min karakter",
+            "title.max" => "maksimal masukkan :max karakter",
             "category_id.required" => "Pilih salah satu :attribute",
+            "status.required" => "Pilih salah satu :attribute",
             "body.required" => ":attribute tidak boleh kosong",
-            "body.min" => "miminal masukkan :min karakter atau",
-            "thumbnail.image" => "yang anda upload harus berupa gambar(png,jpg,jpeg)",
-            "thumbnail.max:1000" => "maksimal file yang dimasukkan adalah 1mb"
+            "body.min" => "miminal masukkan :min karakter atau lebih",
+           "thumbnail.required" => ":attribute tidak boleh kosong"
         ],[
             // costume field name
             "title" => "judul",
             "category_id" => "kategory",
+            "status" => "status",
             "body" => "tulisan",
-            "thumbnail" =>  "gambar"
-        ])->validate();
-        
-        // dd($request->thumbnail);
-
-        // upload thumbnail kalau nggk pake filepond
-        // if($request->hasFile("thumbnail")){
-        //     if(!empty($request->user()->avatar)){
-        //         Storage::disk("public")->delete($request->user()->avatar);
-        //     }
-
-        //     $thumbnailPath = $request->file("thumbnail")->store("img","public");
-        // }
+            "thumbnail" =>  "thumbnail"
+        ])->validate(); 
 
         if($request->thumbnail){
             if(!empty($request->user()->avatar)){
@@ -122,12 +115,14 @@ class PostDashboardController extends Controller
             "title" => $request->title,
             "author_id" => Auth::user()->id,
             "category_id" => $request->category_id,
+            "watch" => 0,
+            "status" => $request->status,
             "slug" => Str::slug($request->title),
             "body" => $request->body,
             "thumbnail" => $thumbnailPath ?? null
         ]);
 
-        return redirect("/dashboard")->with(["success"=>"Artikel Berhasil ditambahkan"]);
+        return redirect("/dashboard/menejemen-artikel")->with(["success"=>"Artikel Berhasil ditambahkan"]);
     }
 
     public function uploadThumbnail(Request $request){
@@ -143,7 +138,8 @@ class PostDashboardController extends Controller
      */
     public function show(Post $post)
     {
-        return view("dashboard.show", ["post" => $post]);
+        // dd($post);
+        return view("components.posts.post-dashboard", ["post" => $post]);
     }
 
     /**
@@ -152,7 +148,7 @@ class PostDashboardController extends Controller
     public function edit(Post $post)
     {
         // return "ambatukam";
-        return view("dashboard.edit", [
+        return view("components.posts.edit-post-dashboard", [
             "post" => $post,
             "categories" => Category::all()
         ]);
@@ -170,6 +166,7 @@ class PostDashboardController extends Controller
         $request->validate([
             "title" => "required|min:4|max:255|unique:posts,title" . $post->title,
             "category_id" => "required",
+            "status" => "required",
             "body" => "required",
             "thumbnail" => "max:1000"
         ]);
@@ -204,6 +201,7 @@ class PostDashboardController extends Controller
             "title" => $request->title,
             "author_id" => Auth::user()->id,
             "category_id" => $request->category_id,
+            "status" => $request->status,
             "slug" => Str::slug($request->title),
             "body" => $request->body,
             "thumbnail" => $newPathName ?? $post->thumbnail
@@ -211,7 +209,7 @@ class PostDashboardController extends Controller
 
 
         // Redirect
-        return redirect("/dashboard")->with(["success"=>"Post berhasil diupdate"]);
+        return redirect("/dashboard/menejemen-artikel")->with(["success"=>"Post berhasil diupdate"]);
     }
 
     /**
@@ -223,8 +221,7 @@ class PostDashboardController extends Controller
         if(!empty($post->thumbnail)){
             Storage::disk("public")->delete($post->thumbnail);
         }
-        Storage::disk("public")->delete("tmp/jxDT4HkW8aiQYwEPKg6I0sz8KxzOeWBrBnHPPDiE.jpg");
         $post->delete();
-        return redirect("/dashboard")->with(["success"=>"Artikel <b>$postTitle</b> berhasil dihapus!"]);
+        return redirect("/dashboard/menejemen-artikel")->with(["info"=>"Artikel <b>$postTitle</b> berhasil dihapus!"]);
     }
 }

@@ -15,7 +15,7 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        Post::factory(90)->recycle([
+        Post::factory(60)->recycle([
             Category::all(),
             User::all()
         ])->create();

@@ -19,17 +19,17 @@ class PostController extends Controller
         if (request('category')) {
             return view('posts', [
                 'title' => 'Artikel '.Str::title(Str::replace('-', ' ', $category)),
-                'posts' => Post::latest()->filter($filters)->paginate(10)->withQueryString(),
-                'lastPosts' => Post::latest()->paginate(4)->withQueryString(),
-                'popularPosts' => Post::whereMonth('created_at', now()->month)->orderBy('watch', 'desc')->paginate(4)->withQueryString(),
+                'posts' => Post::latest()->where("status", "published")->filter($filters)->paginate(10)->withQueryString(),
+                'lastPosts' => Post::latest()->where("status", "published")->paginate(4)->withQueryString(),
+                'popularPosts' => Post::whereMonth('created_at', now()->month)->where("status", "published")->orderBy('watch', 'desc')->paginate(4)->withQueryString(),
                 'categoryName' => Str::title(Str::replace('-', ' ', $category)),
             ]);
         } else {
             return view('posts', [
                 'title' => 'Artikel Turats Tebuireng',
-                'posts' => Post::latest()->paginate(16)->withQueryString(),
-                'lastPosts' => Post::latest()->paginate(4)->withQueryString(),
-                'popularPosts' => Post::whereMonth('created_at', now()->month)->orderBy('watch', 'desc')->paginate(4)->withQueryString(),
+                'posts' => Post::latest()->where("status", "published")->paginate(16)->withQueryString(),
+                'lastPosts' => Post::latest()->where("status", "published")->paginate(4)->withQueryString(),
+                'popularPosts' => Post::whereMonth('created_at', now()->month)->where("status", "published")->orderBy('watch', 'desc')->paginate(4)->withQueryString(),
             ]);
         }
 

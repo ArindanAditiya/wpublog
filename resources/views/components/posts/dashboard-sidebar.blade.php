@@ -46,16 +46,16 @@
         </a>
     </nav>
 
-    <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-emerald-800">
+    <a href="/profile" class="absolute bottom-0 left-0 right-0 p-4 border-t border-emerald-800 hover:bg-emerald-800">
         <div class="flex items-center gap-3">
             <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('img/default-avatar.jpg') }}"
                 alt="{{ Auth::user()->username }}"
                 class="w-8 h-8 rounded-full bg-emerald-700 flex items-center justify-center">
             </img>
             <div class="sidebar-text">
-                <p class="text-sm font-medium">Administrator</p>
-                <p class="text-xs text-emerald-300">admin@turots.id</p>
+                <p class="text-sm font-medium">{{ Auth::user()->name }}</p>
+                <p class="text-xs text-emerald-300">{{ Auth::user()->email }}</p>
             </div>
         </div>
-    </div>
+    </a>
 </aside>

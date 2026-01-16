@@ -18,6 +18,7 @@
                     <div class="flex flex-col gap-x-6 gap-y-10 md:flex-row md:flex-wrap lg:justify-between lg:gap-x-0">
                         @foreach ($posts as $post)
                             <a href="/post/{{ $post->slug }}" class="w-full md:w-[48%] lg:w-[49%]">
+                                <span>status : {{ $post->status }}</span>
                                 <article class="group cursor-pointer flex flex-col h-full">
                                     <div class="overflow-hidden rounded-lg mb-4 h-48 lg:h-52 bg-gray-100">
                                         <img src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
@@ -73,6 +74,7 @@
                         <div class="flex flex-col gap-6">
                             @foreach ($popularPosts as $post)
                                 <a href="/post/{{ $post->slug }}" class="flex gap-4 group items-start border-bottom">
+                                    <span>status : {{ $post->status }}</span>
                                     <div class="w-24 h-24 shrink-0 rounded overflow-hidden bg-gray-200">
                                         <img src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
                                             alt="{{ $post->title }}"
@@ -118,6 +120,7 @@
                         <div class="flex flex-col gap-6">
                             @foreach ($lastPosts as $post)
                                 <a href="/post/{{ $post->slug }}" class="flex gap-4 group items-start">
+                                    <span>status : {{ $post->status }}</span>
                                     <div class="w-24 h-24 shrink-0 rounded overflow-hidden bg-gray-200">
                                         <img src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('img/default-thumbnail.jpg') }}"
                                             alt="{{ $post->title }}"

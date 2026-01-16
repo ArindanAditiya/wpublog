@@ -54,19 +54,21 @@ Route::middleware(["auth","verified"])->group(function () {
     Route::get('/dashboard', [PostDashboardController::class, 'index'])->name('dashboard');
 
     // CREATE
-    Route::get("/dashboard/menejemen-artikel", [PostDashboardController::class, "create"]);
-    Route::post('/dashboard', [PostDashboardController::class, 'store']);
+    Route::get("/dashboard/menejemen-artikel", [PostDashboardController::class, "articleMenegement"]);
+    Route::get("/dashboard/menejemen-artikel/create", [PostDashboardController::class, "create"]);
+    Route::post('/dashboard/menejemen-artikel/create', [PostDashboardController::class, 'store']);
     Route::post("/uploadthumbnail", [PostDashboardController::class, "uploadThumbnail"]);
 
     // DELETE
-    Route::delete("/dashboard/{post:slug}", [PostDashboardController::class, "destroy"]);
+    Route::delete("dashboard/menejemen-artikel/{post:slug}/delete", [PostDashboardController::class, "destroy"]);
 
     // UPDATE
-    Route::get("/dashboard/{post:slug}/edit", [PostDashboardController::class, "edit"]);
-    Route::patch("/dashboard/{post:slug}/edit", [PostDashboardController::class, "update"]);
+    Route::get("/dashboard/menejemen-artikel/{post:slug}/edit", [PostDashboardController::class, "edit"]);
+    Route::patch("/dashboard/menejemen-artikel/{post:slug}/edit", [PostDashboardController::class, "update"]);
 
     // READ : show single post
-    Route::get("/dashboard/{post:slug}", [PostDashboardController::class, "show"]);
+    Route::get("/dashboard/menejemen-artikel/{post:slug}", [PostDashboardController::class, "show"]);
+
 });
 
 // PROFILE

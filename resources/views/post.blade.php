@@ -51,7 +51,7 @@
                 </div>
 
                 <article class="prose max-w-none text-gray-700 leading-relaxed text-justify space-y-4">
-                    {{ $post->body }}
+                    {!! $post->body !!}
                 </article>
 
                 <!-- IMAGE WITH CAPTION -->
@@ -174,7 +174,7 @@
         <div class="pt-8 lg:border-t border-gray-100 mt-12">
             <h3 class="text-2xl md:text-3xl font-bold my-8 text-white bg-[#A2AF9B] inline-block p-1">Artikel Terkait
             </h3>
-            <div id="related-posts" class="flex flex-wrap justify-start gap-6 lg:gap-1 lg:justify-between">
+            <div id="related-posts" class="flex flex-wrap justify-start gap-6 lg:gap-2 lg:justify-start">
                 @foreach ($relatedPosts as $post)
                     <a href="/post/{{ $post->slug }}" class="w-full sm:w-[48%] lg:w-[17%] group cursor-pointer">
                         <div class="h-50 md:h- rounded-lg overflow-hidden bg-gray-100 mb-3">
